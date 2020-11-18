@@ -10,7 +10,7 @@ services:
       - 8888:8888
 
   registry:
-    build: registry
+    build: registry-eureka
 
   gateway:
     build: gateway

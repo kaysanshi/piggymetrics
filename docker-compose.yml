@@ -9,17 +9,18 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
-
+  # 指定服務名
   config:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    # 鏡像編排 同楊也可以使用dockerfile
     image: sqshq/piggymetrics-config
     restart: always
     logging:
       options:
         max-size: "10m"
         max-file: "10"
-
+  # 指定服務名
   registry:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD

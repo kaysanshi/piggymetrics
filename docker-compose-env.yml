@@ -1,0 +1,60 @@
+version: '3.1'
+services:
+  # 安装rabbitMQ
+  rabbitmq:
+    restart: always
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      TZ: Asia/Shanghai
+      RABBITMQ_DEFAULT_USER: rabbit
+      RABBITMQ_DEFAULT_PASS: 123456
+    volumes:
+      - ./data:/var/lib/rabbitmq
+  # 安装tomcat
+  tomcat:
+    restart: always
+    image: tomcat
+    container_name: tomcat
+    ports:
+      - 8080:8080
+    volumes:
+      - /usr/local/docker/tomcat/webapps/test:/usr/local/tomcat/webapps/test
+    environment:
+      TZ: Asia/Shanghai
+  # 安装mysql:
+  mysql:
+    restart: always
+    image: mysql:5.7.22
+    container_name: mysql
+    ports:
+      - - 3306:3306
+        environment:
+          TZ: Asia/Shanghai
+          MYSQL_ROOT_PASSWORD: 123456
+        command:
+          --character-set-server=utf8mb4
+          --collation-server=utf8mb4_general_ci
+          --explicit_defaults_for_timestamp=true
+          --lower_case_table_names=1
+          --max_allowed_packet=128M
+          --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+        volumes:
+          - mysql-data:/var/lib/mysq
+    volumes:
+      mysql-data:
+  # 安装oracle:
+  oracle:
+    # sid: xe
+    # username: system
+    # password: oracle
+    image: sath89/oracle-xe-11g
+    restart: always   #如果docker容器由于一些问题挂掉的化，docker-composer会自动把容器给启动起来
+    container_name: oracle  #启动之后容器的名称
+    volumes:
+      - /my-docker-data/oracle-11g/data:/u01/app/oracle
+    ports:
+      - 1521:1521
